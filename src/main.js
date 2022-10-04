@@ -12,14 +12,27 @@ Vue.use(VueTextareaAutosize);
 Vue.config.productionTip = false;
 
 firebase.initializeApp({
-  apiKey: "AIzaSyDzaJaxfq7jZvB9RbH10Nxdu21pE8VnqcQ",
-  authDomain: "calendar-firebase-vue.firebaseapp.com",
-  databaseURL: "https://calendar-firebase-vue.firebaseio.com",
-  projectId: "calendar-firebase-vue",
-  storageBucket: "calendar-firebase-vue.appspot.com",
-  messagingSenderId: "731564869432",
-  appId: "1:731564869432:web:22b2ceef6af5d24be7a3cd",
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
 });
+
+// SAMPLE FIRESTORE DATABASE
+/*
+firebase.initializeApp({
+  apiKey: "AIaSyZaJaxfq7jZvB8RusH11xdu22pE8VnqcO",
+  authDomain: "calendar-vue.firebaseapp.com",
+  databaseURL: "https://calendar-vue.firebaseio.com",
+  projectId: "calendar-vue",
+  storageBucket: "calendar-vue.appspot.com",
+  messagingSenderId: "731790829143",
+  appId: "1:731790829143:web:22R3ceeuSHad7d81be7a3d",
+});
+*/
 
 export const db = firebase.firestore();
 

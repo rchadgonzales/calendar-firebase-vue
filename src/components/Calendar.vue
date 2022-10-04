@@ -3,10 +3,10 @@
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat>
-          <v-btn color="primary" dark @click.stop="dialog = true" class="mr-3">
+          <v-btn color="primary" class="mr-3" dark @click="dialog = true">
             New Event
           </v-btn>
-          <v-btn outlined class="mr-3" color="grey darken-2" @click="setToday">
+          <v-btn outlined class="mr-3" color="green darken-3" @click="setToday">
             Today
           </v-btn>
           <v-btn fab text small @click="prev">
@@ -15,17 +15,11 @@
           <v-btn fab text small @click="next" class="mr-3">
             <v-icon small>mdi-chevron-right</v-icon>
           </v-btn>
-          <!-- <v-toolbar-title>{{ title }}</v-toolbar-title> -->
-          <v-toolbar-title v-if="$refs.calendar">
-            {{ $refs.calendar.title }}
-          </v-toolbar-title>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <!-- <div class="flex-grow-1"></div> -->
           <v-menu bottom right>
-            <!-- <template v-slot:activator="{ on }"> -->
-            <template v-slot:activator="{ on, attrs }">
-              <!-- <v-btn outlined v-on="on"> -->
-              <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
+            <template v-slot:activator="{ on }">
+              <v-btn outlined color="grey darken-3" v-on="on">
                 <span>{{ typeToLabel[type] }}</span>
                 <v-icon right>mdi-menu-down</v-icon>
               </v-btn>
@@ -48,7 +42,8 @@
         </v-toolbar>
       </v-sheet>
 
-      <!-- <v-dialog v-model="dialog" max-width="500">
+      <!-- ADD EVENT DIALOG -->
+      <v-dialog v-model="dialog" max-width="500">
         <v-card>
           <v-container>
             <v-form @submit.prevent="addEvent">
@@ -75,7 +70,7 @@
               <v-text-field
                 v-model="color"
                 type="color"
-                label="color (click to open color menu)"
+                label="select color (click to open color menu)"
               ></v-text-field>
               <v-btn
                 type="submit"
@@ -83,70 +78,14 @@
                 class="mr-4"
                 @click.stop="dialog = false"
               >
-                create event
+                Create Event
               </v-btn>
             </v-form>
           </v-container>
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="dialogDate" max-width="500">
-        <v-card>
-          <v-container>
-            <v-form @submit.prevent="addEvent">
-              <v-text-field
-                v-model="name"
-                type="text"
-                label="event name (required)"
-              ></v-text-field>
-              <v-text-field
-                v-model="details"
-                type="text"
-                label="detail"
-              ></v-text-field>
-              <v-text-field
-                v-model="start"
-                type="date"
-                label="start (required)"
-              ></v-text-field>
-              <v-text-field
-                v-model="end"
-                type="date"
-                label="end (required)"
-              ></v-text-field>
-              <v-text-field
-                v-model="color"
-                type="color"
-                label="color (click to open color menu)"
-              ></v-text-field>
-              <v-btn
-                type="submit"
-                color="primary"
-                class="mr-4"
-                @click.stop="dialog = false"
-              >
-                create event
-              </v-btn>
-            </v-form>
-          </v-container>
-        </v-card>
-      </v-dialog> -->
-
       <v-sheet height="600">
-        <!-- <v-calendar
-          ref="calendar"
-          v-model="focus"
-          color="primary"
-          :events="events"
-          :event-color="getEventColor"
-          :event-margin-bottom="3"
-          :now="today"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="setDialogDate"
-          @change="updateRange"
-        ></v-calendar> -->
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -159,6 +98,7 @@
           @click:date="viewDay"
           @change="updateRange"
         ></v-calendar>
+
         <v-menu
           v-model="selectedOpen"
           :close-on-content-click="false"
@@ -173,7 +113,6 @@
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-icon>mdi-dots-vertical</v-icon>
-              <!-- <div class="flex-grow-1"></div> -->
             </v-toolbar>
             <v-card-text>
               <form v-if="currentlyEditing !== selectedEvent.id">
@@ -285,7 +224,6 @@ export default {
     async getEvents() {
       let snapshot = await db.collection("calEvent").get();
       let events = [];
-      // const events = [];
       snapshot.forEach((doc) => {
         // console.log(doc.data());
         let appData = doc.data();
@@ -293,10 +231,6 @@ export default {
         events.push(appData);
       });
       this.events = events;
-    },
-    setDialogDate({ date }) {
-      this.dialogDate = true;
-      this.focus = date;
     },
     viewDay({ date }) {
       this.focus = date;
@@ -319,8 +253,9 @@ export default {
         await db.collection("calEvent").add({
           name: this.name,
           details: this.details,
-          start: this.start,
           end: this.end,
+          start: this.start,
+
           color: this.color,
         });
         this.getEvents();
@@ -328,9 +263,9 @@ export default {
           (this.details = ""),
           (this.start = ""),
           (this.end = ""),
-          (this.color = "");
+          (this.color = "#097BD2");
       } else {
-        alert("You must enter event name, start, and end time");
+        alert("You must fill in all the required field.");
       }
     },
     editEvent(ev) {
